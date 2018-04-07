@@ -1,12 +1,22 @@
 from time import sleep
 import serial
 
-arduinoOut = serial.Serial('COM6', 9600)
+# HAUNTED HOUSE INTENTS
+# Ghost ------- 40
+# Corpse ------ 41
+# LightsOut --- 42
+# Flicker ----- 43
+# Noise ------- 44
 
-counter = 32
-while True:
-     counter +=1
-     arduinoOut.write(str(chr(counter)).encode()) # Convert the decimal number to ASCII then send it to the Arduino
-     sleep(.1) # Delay for one tenth of a second
-     if counter == 255:
-        counter = 32
+def play_out_intent(intent):
+    arduinoOut = serial.Serial('COM6', 9600)
+    cases = {
+        Ghost: 40,
+        Corpse: 41,
+        LightsOut: 42,
+        Flicker: 43,
+        Noise: 44
+    }
+    
+    output = str(cases.get(intent, 35))
+    arduinoOut.write(output.encode())
