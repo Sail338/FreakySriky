@@ -40,7 +40,10 @@ void loop() {
       pictureFrame();
     }
 
-    delay(500);
+    while (Serial.read() >= 0)
+    ;
+    delay(2000);
+    
   }
 
 }

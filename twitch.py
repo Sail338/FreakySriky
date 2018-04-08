@@ -42,7 +42,7 @@ def printit():
      print("BEFORE" +str(count_ds))
      if(count_ds[check] != 0):
         chan_ = pygame.mixer.find_channel()
-        chan_.play(pygame.mixer.Sound(map_audio[check]), fade_ms = 0)
+        #chan_.play(pygame.mixer.Sound(map_audio[check]), fade_ms = 0)
         arduino.play_out_intent(check)
         clearDS()
         print("AFRER" + str(count_ds))
