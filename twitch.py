@@ -6,8 +6,11 @@ import arduino
 import watson_developer_cloud
 import threading
 import operator
+import os
+import pygame
 
-intents = ['Ghost','Corpse','LightsOut','Flicker','Noise']
+intents = ['Ghost','Corpse','LightsOut','Flicker','Creaking']
+
 def grabOauth():
     a = requests.get("https://id.twitch.tv/oauth2/authorize?client_id=" + config.CLIENT_ID +"&redirect_uri=http://localhost&response_type=token%20id_token &scope=openid + chat_login+channel_editor")
     print(a)
@@ -19,8 +22,17 @@ def clearDS():
         count_ds[i] = 0
 
 clearDS()
-
+pygame.mixer.init()
 def printit():
+
+  map_audio = {
+        "Ghost":"Audio/Ghost.wav",
+         "Corpse":"Audio/bed_corpse.wav",
+        "Flicker":"Audio/Thunder.wav",
+        "Creaking":"Audio/Creaking .wav",
+        "LightsOut":"Audio/lights_out.wav"
+
+  }
   global count_ds
   ds = count_ds
   threading.Timer(3.0, printit).start()
@@ -28,6 +40,7 @@ def printit():
      check = max(ds.items(), key=operator.itemgetter(1))[0]
      print("BEFORE" +str(count_ds))
      if(count_ds[check] != 0):
+        pygame.mixer.Channel(1).play(pygame.mixer.Sound(map_audio[check]))
 #        arduino.play_out_intent(check)
         clearDS()
         print("AFRER" + str(count_ds))
@@ -56,6 +69,9 @@ def connectToTwitch():
         workspace_id = config.WORKSPACE_ID
         #start polling
         printit()
+        pygame.mixer.music.load("Creepy-Music.mp3")
+        pygame.mixer.music.play()
+    
         while True:
             #poll for 5 seconds
             did_pool = False
