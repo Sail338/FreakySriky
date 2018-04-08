@@ -28,7 +28,7 @@ map_audio = {
         "Ghost":"Ghost.ogg",
         "Corpse":"bed_corpse.ogg",
         "Flicker":"Thunder.ogg",
-        "Creaking":"creaking2.ogg",
+        "Creaking":"EvilLaugh.ogg",
         "LightsOut":"lights_out.ogg"
 
   }
