@@ -6,6 +6,7 @@ import arduino
 import watson_developer_cloud
 import threading
 import operator
+import time
 import os
 import pygame
 
@@ -24,26 +25,28 @@ def clearDS():
 clearDS()
 
 map_audio = {
-        "Ghost":"Ghost.wav",
-        "Corpse":"bed_corpse.wav",
-        "Flicker":"Thunder.wav",
-        "Creaking":"creaking2.wav",
-        "LightsOut":"lights_out.wav"
+        "Ghost":"Ghost.ogg",
+        "Corpse":"bed_corpse.ogg",
+        "Flicker":"Thunder.ogg",
+        "Creaking":"creaking2.ogg",
+        "LightsOut":"lights_out.ogg"
 
   }
 pygame.mixer.init()
-def printit():
 
+def printit():
   global count_ds
   ds = count_ds
-  threading.Timer(3.0, printit).start()
+  threading.Timer(11.0, printit).start()
   if len(ds) >0:
      check = max(ds.items(), key=operator.itemgetter(1))[0]
      print("BEFORE" +str(count_ds))
      if(count_ds[check] != 0):
-        chan_ = pygame.mixer.find_channel()
-        #chan_.play(pygame.mixer.Sound(map_audio[check]), fade_ms = 0)
+        pygame.mixer.init()
         arduino.play_out_intent(check)
+        chan_ = pygame.mixer.find_channel()
+        time.sleep(5.0)
+        chan_.play(pygame.mixer.Sound(map_audio[check]))
         clearDS()
         print("AFRER" + str(count_ds))
   else:
@@ -98,7 +101,9 @@ def connectToTwitch():
                     intent = response['output']['text']
 
                     print(intent)
-                    if check in intents:
+                    if(len(intent)>0):
+                        check = intent[0]
+                    if check  in intents:
                         print("Found something to increment")
                         count_ds[check] +=1                        
                          

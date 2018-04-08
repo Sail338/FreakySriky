@@ -2,6 +2,7 @@
 
 Servo servoBed;
 Servo servoFrame;
+Servo servoGhost;
 
 void setup() {
   Serial.begin(9600);
@@ -19,6 +20,8 @@ void setup() {
   servoBed.write(0);
   servoFrame.attach(11);
   servoFrame.write(90);
+  servoGhost.attach(6);
+  servoGhost.write(0);
 }
 
 void loop() {
@@ -29,7 +32,7 @@ void loop() {
     inMessage = Serial.read();
 
     if (inMessage == '1') {
-
+      ghost();
     } else if (inMessage == '2') {
       corpse();
     } else if (inMessage == '3') { 
@@ -42,8 +45,8 @@ void loop() {
 
     while (Serial.read() >= 0)
     ;
+
     delay(2000);
-    
   }
 
 }
@@ -80,6 +83,13 @@ void corpse(){
   delay(300);
 }
 
+void ghost(){
+  servoGhost.write(60);
+  delay(2000);
+  servoGhost.write(0);
+  delay(300);
+}
+
 void lightsOut(int len){
   digitalWrite(11, LOW);
   delay(len);
@@ -110,8 +120,7 @@ void constantFlicker(int len, int rate, String a){
   int flickerRate = rate;
   if(flickerRate < 50) flickerRate = 50;
   
-  while((startFunction-startProgram) < timeLength){
-    startFunction = millis();
+  for(int i=0;i<4;i++){
     digitalWrite(2, HIGH);
     digitalWrite(7, HIGH);
     digitalWrite(4, HIGH);

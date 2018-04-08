@@ -9,7 +9,7 @@ import serial
 # Noise ------- 5
 
 def play_out_intent(intent):
-    arduinoOut = serial.Serial('COM7', 9600)
+    arduinoOut = serial.Serial('/dev/cu.usbmodem1421', 9600)
     cases = {
         "Ghost": 1,
         "Corpse": 2,
