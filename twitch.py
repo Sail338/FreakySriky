@@ -3,6 +3,7 @@ import requests
 import socket
 import re
 import arduino
+import watson_developer_cloud
 
 intents = ['Ghost','Corpse','LightsOut','Flicker','Noise']
 def grabOauth():
@@ -20,6 +21,14 @@ def connectToTwitch():
         client.sendto(message.encode('utf-8'),dat)
         client.sendto(message_user.encode('utf-8'),dat)
         client.sendto('JOIN #sail338 \r\n'.encode(),dat)
+        conversation = watson_developer_cloud.ConversationV1(
+        username = config.USERNAME, 
+        password = config.PASSWORD,
+        version = '2017-05-26'
+        )
+
+        workspace_id = config.WORKSPACE_ID
+
         while True:
             data = client.recv(1024)
             print(data)
@@ -32,7 +41,14 @@ def connectToTwitch():
                     check = check.strip("\\r\\n")
                     
                     check = check.replace("\\r\\n'","")
-                    
+                    response = conversation.message(
+                        workspace_id = workspace_id,
+                        input = {
+                            'text': check
+                        }
+                    )
+                    intent = response['output']['text']
+                    print(intent)
                     if check in intents:
                         print("GUCCI")
                         arduino.play_out_intent(check)
