@@ -22,10 +22,8 @@ def clearDS():
         count_ds[i] = 0
 
 clearDS()
-pygame.mixer.init()
-def printit():
 
-  map_audio = {
+map_audio = {
         "Ghost":"Audio/Ghost.wav",
          "Corpse":"Audio/bed_corpse.wav",
         "Flicker":"Audio/Thunder.wav",
@@ -33,6 +31,9 @@ def printit():
         "LightsOut":"Audio/lights_out.wav"
 
   }
+pygame.mixer.init()
+def printit():
+
   global count_ds
   ds = count_ds
   threading.Timer(3.0, printit).start()
@@ -40,7 +41,8 @@ def printit():
      check = max(ds.items(), key=operator.itemgetter(1))[0]
      print("BEFORE" +str(count_ds))
      if(count_ds[check] != 0):
-        pygame.mixer.Channel(1).play(pygame.mixer.Sound(map_audio[check]))
+        chan_ = pygame.mixer.find_channel()
+        pygame.mixer.chan_.play(pygame.mixer.Sound(map_audio[check]), fade_ms = 0)
 #        arduino.play_out_intent(check)
         clearDS()
         print("AFRER" + str(count_ds))
