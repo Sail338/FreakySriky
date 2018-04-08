@@ -4,7 +4,7 @@ import socket
 import re
 import arduino
 
-intents = ['GHOST','CORPSE','LightsOut','Flicker','Noise']
+intents = ['Ghost','Corpse','LightsOut','Flicker','Noise']
 def grabOauth():
     a = requests.get("https://id.twitch.tv/oauth2/authorize?client_id=" + config.CLIENT_ID +"&redirect_uri=http://localhost&response_type=token%20id_token &scope=openid + chat_login+channel_editor")
     print(a)
@@ -31,11 +31,11 @@ def connectToTwitch():
                     check = parsed[2]
                     check = check.strip("\\r\\n")
                     
-                    print(check.replace("\\r\\n'",""))
-                    for i in intents:
-                        if check in i:
-                            print("GUCCI")
-                            arduino.play_out_intent(check)
+                    check = check.replace("\\r\\n'","")
+                    
+                    if check in intents:
+                        print("GUCCI")
+                        arduino.play_out_intent(check)
 
     except Exception as e:
         print(str(e))

@@ -2,21 +2,26 @@ from time import sleep
 import serial
 
 # HAUNTED HOUSE INTENTS
-# Ghost ------- 40
-# Corpse ------ 41
-# LightsOut --- 42
-# Flicker ----- 43
-# Noise ------- 44
+# Ghost ------- 1
+# Corpse ------ 2
+# LightsOut --- 3
+# Flicker ----- 4
+# Noise ------- 5
 
 def play_out_intent(intent):
     arduinoOut = serial.Serial('COM6', 9600)
     cases = {
-        Ghost: 40,
-        Corpse: 41,
-        LightsOut: 42,
-        Flicker: 43,
-        Noise: 44
+        "Ghost": 1,
+        "Corpse": 2,
+        "LightsOut": 3,
+        "Flicker": 4,
+        "Noise": 5
     }
-    
+    print(intent)
     output = str(cases.get(intent, 35))
-    arduinoOut.write(output.encode())
+    print(output)
+    machineGun = 0
+    while (machineGun < 10):
+        arduinoOut.write(output.encode())
+        sleep(.1)
+        machineGun+=1
