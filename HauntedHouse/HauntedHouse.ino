@@ -7,15 +7,18 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Ready");
   pinMode(13, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(4, OUTPUT);
   pinMode(11, OUTPUT);
   pinMode(10, OUTPUT);
   pinMode(12, OUTPUT); //Initiates Motor Channel A pin
   pinMode(9, OUTPUT); //Initiates Brake Channel A pin
   
-  servoBed.attach(5);
-  servoBed.write(75);
-  servoFrame.attach(6);
-  servoFrame.write(75);
+  servoBed.attach(10);
+  servoBed.write(0);
+  servoFrame.attach(11);
+  servoFrame.write(90);
 }
 
 void loop() {
@@ -26,20 +29,15 @@ void loop() {
     inMessage = Serial.read();
 
     if (inMessage == '1') {
-      turnOffAll();
-      digitalWrite(2,HIGH);
+
     } else if (inMessage == '2') {
-      turnOffAll();
-      digitalWrite(4,HIGH);
-    } else if (inMessage == '3') {
-      turnOffAll();
-      digitalWrite(7,HIGH);
+      corpse();
+    } else if (inMessage == '3') { 
+
     } else if (inMessage == '4') {
-      turnOffAll();
-      digitalWrite(8,HIGH);
+      flicker();
     } else if (inMessage == '5') {
-      turnOffAll();
-      digitalWrite(12,HIGH);
+      pictureFrame();
     }
 
     delay(500);
@@ -56,17 +54,27 @@ void turnOffAll(){
 }
 
 void pictureFrame(){
-  servoFrame.write(50);
+  servoFrame.write(70);
+  delay(300);
+  servoFrame.write(110);
+  delay(300);
+  servoFrame.write(70);
+  delay(300);
+  servoFrame.write(110);
+  delay(300);
+  servoFrame.write(70);
+  delay(300);
+  servoFrame.write(110);
   delay(300);
   servoFrame.write(90);
   delay(300);
 }
 
 void corpse(){
-  servoBed.write(0);
-  delay(3000);
   servoBed.write(75);
-  delay(500);
+  delay(2000);
+  servoBed.write(0);
+  delay(300);
 }
 
 void lightsOut(int len){
@@ -88,8 +96,8 @@ void buzz(){
 
 void flicker(){
   constantFlicker(500, 300, "1");
-  constantFlicker(300,500, "2");
-  constantFlicker(100, 1000, "3");
+  //constantFlicker(300,500, "2");
+  //constantFlicker(100, 1000, "3");
 }
 
 void constantFlicker(int len, int rate, String a){
@@ -101,10 +109,14 @@ void constantFlicker(int len, int rate, String a){
   
   while((startFunction-startProgram) < timeLength){
     startFunction = millis();
-    digitalWrite(13, HIGH);
+    digitalWrite(2, HIGH);
+    digitalWrite(7, HIGH);
+    digitalWrite(4, HIGH);
     Serial.print(a);
     delay(rate);
-    digitalWrite(13, LOW);
+    digitalWrite(2, LOW);
+    digitalWrite(7, LOW);
+    digitalWrite(4, LOW);
     Serial.print(a);
     delay(rate);
   }

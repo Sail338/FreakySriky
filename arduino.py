@@ -9,13 +9,13 @@ import serial
 # Noise ------- 5
 
 def play_out_intent(intent):
-    arduinoOut = serial.Serial('COM6', 9600)
+    arduinoOut = serial.Serial('COM7', 9600)
     cases = {
         "Ghost": 1,
         "Corpse": 2,
         "LightsOut": 3,
         "Flicker": 4,
-        "Noise": 5
+        "Creaking": 5
     }
     print(intent)
     output = str(cases.get(intent, 35))
